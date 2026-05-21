@@ -1,0 +1,42 @@
+{
+  "HR Documents": {
+    "categories": [
+      "phone",
+      "email",
+      "dob",
+      "pan",
+      "aadhaar",
+      "ssn",
+      "passport"
+    ],
+    "custom_words": []
+  },
+  "Medical Records": {
+    "categories": [
+      "phone",
+      "email",
+      "dob",
+      "ssn",
+      "aadhaar"
+    ],
+    "custom_words": [
+      "diagnosis",
+      "prescription",
+      "patient"
+    ]
+  },
+  "Legal Contracts": {
+    "categories": [
+      "phone",
+      "email",
+      "pan",
+      "passport",
+      "credit"
+    ],
+    "custom_words": [
+      "confidential",
+      "attorney",
+      "plaintiff"
+    ]
+  }
+}

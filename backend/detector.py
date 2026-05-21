@@ -10,7 +10,7 @@ except Exception:
 
 REGEX_PATTERNS = {
     'phone':      r'(\+?\d[\d\s\-().]{7,}\d)',
-    'email':      r'[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}',
+    'email':      r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}',
     'dob':        r'\b(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})\b',
     'pan':        r'\b[A-Z]{5}\d{4}[A-Z]\b',
     'aadhaar':    r'\b\d{4}\s\d{4}\s\d{4}\b',

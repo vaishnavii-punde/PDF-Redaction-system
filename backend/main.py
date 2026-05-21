@@ -55,7 +55,7 @@ async def analyze(
     with open(input_path, 'wb') as f: f.write(await file.read())
     pages = extract_text_and_positions(input_path)
     if not any(p['text'].strip() for p in pages): pages = ocr_if_needed(input_path)
-    cats = [c.strip() for c in categories.split(',') if c.strip()]
+    cats = [c.strip().lower() for c in categories.split(',') if c.strip()]
     words = [w.strip() for w in custom_words.split(',') if w.strip()]
     findings = detect_sensitive(pages, cats, words, min_confidence=min_confidence)
     preview_pages = get_preview_pages(input_path, findings)
@@ -165,7 +165,7 @@ async def batch_redact(
     custom_label: str = Form(default='[REDACTED]'),
     min_confidence: float = Form(default=0.0)
 ):
-    cats = [c.strip() for c in categories.split(',') if c.strip()]
+    cats = [c.strip().lower() for c in categories.split(',') if c.strip()]
     words_list = [w.strip() for w in custom_words.split(',') if w.strip()]
     results = []
     output_files = []

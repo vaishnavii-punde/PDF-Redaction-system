@@ -1,0 +1,19 @@
+{
+    "HR_Employee_Record": {
+        "text": "EMPLOYEE RECORD\nName: Rajesh Sharma\nDOB: 15/08/1990\nAadhaar: 9876 5432 1012\nPAN: ABCDE1234F\nEmail: rajesh@techcorp.in\nPhone: +91 98765 43210",
+        "ground_truth": {
+            "dob": ["15/08/1990"],
+            "aadhaar": ["9876 5432 1012"],
+            "pan": ["ABCDE1234F"],
+            "email": ["rajesh@techcorp.in"],
+            "phone": ["+91 98765 43210"]
+        }
+    },
+    "Clean_Doc": {
+        "text": "This is a public manual for the software. No private data is here.",
+        "ground_truth": {
+            "email": [],
+            "phone": []
+        }
+    }
+}

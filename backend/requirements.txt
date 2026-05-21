@@ -2,15 +2,12 @@ fastapi
 uvicorn[standard]
 pymupdf
 pdfminer.six
-pytesseract
-pdf2image
-presidio-analyzer
-presidio-anonymizer
 python-multipart
 pillow
-sqlalchemy
 python-dotenv
 aiofiles
 pandas
 openpyxl
+presidio-analyzer
+presidio-anonymizer
 spacy

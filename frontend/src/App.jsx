@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import React from 'react'
 
-const API = 'http://localhost:8000'
+const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 const ALL_CATS = ['phone','email','dob','pan','aadhaar','ssn','passport','credit','ip','voter_id','driving_licence','epic','ifsc','gst','person']
 
 export default function App() {
@@ -118,7 +118,7 @@ export default function App() {
 
   const e = React.createElement
   const typeColor = {pdf:'#5C7CB9',image:'#10b981',excel:'#f59e0b'}
-  const typeIcon = {pdf:'📄',image:'🖼️',excel:'📊'}
+  const typeIcon = {pdf:'ðŸ“„',image:'ðŸ–¼ï¸',excel:'ðŸ“Š'}
 
   const s = {
     page:{minHeight:'100vh',background:'linear-gradient(135deg,#1F4959 0%,#242424 60%,#1F4959 100%)',fontFamily:'Segoe UI,sans-serif',paddingBottom:60},
@@ -164,9 +164,9 @@ export default function App() {
       onChange:ev=>setMinConfidence(Number(ev.target.value)),
       style:{width:'100%',accentColor:'#5C7CB9'}}),
     e('div',{style:{display:'flex',justifyContent:'space-between',color:'#5C7CB9',fontSize:11,marginTop:4}},
-      e('span',null,'0% — show all'),
-      e('span',null,'50% — medium'),
-      e('span',null,'95% — very high only')
+      e('span',null,'0% â€” show all'),
+      e('span',null,'50% â€” medium'),
+      e('span',null,'95% â€” very high only')
     )
   )
 
@@ -205,7 +205,7 @@ export default function App() {
       ...ALL_CATS.map(cat=>{
         const warn=cat==='person'; const on=categories.includes(cat)
         return e('button',{key:cat,onClick:()=>toggleCat(cat),style:s.catBtn(on,warn)},
-          warn?'⚠ PERSON':cat.replace('_',' ').toUpperCase())
+          warn?'âš  PERSON':cat.replace('_',' ').toUpperCase())
       })
     ),
     e('div',{style:{display:'flex',gap:8}},
@@ -225,9 +225,9 @@ export default function App() {
   const uploadCard = e('div',{style:s.card},
     e('div',{style:{color:'#fff',fontWeight:600,marginBottom:8,fontSize:15}},'Upload File'),
     e('div',{style:{display:'flex',gap:8,marginBottom:14,flexWrap:'wrap'}},
-      e('span',{style:s.badge('#5C7CB9')},'📄 PDF'),
-      e('span',{style:s.badge('#10b981')},'🖼️ PNG / JPG'),
-      e('span',{style:s.badge('#f59e0b')},'📊 XLSX / CSV')
+      e('span',{style:s.badge('#5C7CB9')},'ðŸ“„ PDF'),
+      e('span',{style:s.badge('#10b981')},'ðŸ–¼ï¸ PNG / JPG'),
+      e('span',{style:s.badge('#f59e0b')},'ðŸ“Š XLSX / CSV')
     ),
     e('div',{
       onDrop:ev=>{ev.preventDefault();handleFileSelect(ev.dataTransfer.files[0])},
@@ -236,7 +236,7 @@ export default function App() {
       style:{border:'2px dashed #5C7CB9',borderRadius:12,padding:'40px',textAlign:'center',cursor:'pointer',background:'rgba(31,73,89,0.3)'}
     },
       e('input',{id:'fileinput',type:'file',accept:'.pdf,.png,.jpg,.jpeg,.webp,.xlsx,.xls,.csv',style:{display:'none'},onChange:ev=>handleFileSelect(ev.target.files[0])}),
-      e('div',{style:{fontSize:44,marginBottom:10}},file?typeIcon[fileType]:'📂'),
+      e('div',{style:{fontSize:44,marginBottom:10}},file?typeIcon[fileType]:'ðŸ“‚'),
       file
         ?e('div',null,e('p',{style:{color:'#fff',fontWeight:600,margin:'0 0 8px'}},file.name),e('span',{style:s.badge(typeColor[fileType]||'#5C7CB9')},fileType.toUpperCase()))
         :e('div',null,e('p',{style:{color:'#fff',fontWeight:600,margin:'0 0 4px'}},'Drop file here'),e('p',{style:{color:'#5C7CB9',fontSize:13,margin:0}},'PDF, PNG, JPG, XLSX or CSV'))
@@ -274,7 +274,7 @@ export default function App() {
       ...analysis.preview_pages.map((pg,pi)=>
         e('div',{key:pi,style:{...s.card,padding:16,marginBottom:16}},
           e('div',{style:{color:'#5C7CB9',fontSize:12,fontWeight:600,marginBottom:10,textTransform:'uppercase'}},
-            'Page '+(pi+1)+'  —  '+activeFindings.filter(f=>f.page===pi).length+' redactions'),
+            'Page '+(pi+1)+'  â€”  '+activeFindings.filter(f=>f.page===pi).length+' redactions'),
           e('div',{style:{position:'relative',display:'inline-block',width:'100%'}},
             e('img',{src:'data:image/png;base64,'+pg.image,style:{width:'100%',borderRadius:8,display:'block'}}),
             e('svg',{style:{position:'absolute',top:0,left:0,width:'100%',height:'100%'},viewBox:'0 0 '+pg.width+' '+pg.height,preserveAspectRatio:'none'},
@@ -303,7 +303,7 @@ export default function App() {
   )
 
   const successPanel = confirmed&&e('div',{style:{...s.card,borderColor:'#10b981',textAlign:'center',padding:'40px'}},
-    e('div',{style:{fontSize:52,marginBottom:16}},'🎉'),
+    e('div',{style:{fontSize:52,marginBottom:16}},'ðŸŽ‰'),
     e('h3',{style:{color:'#fff',fontSize:22,margin:'0 0 8px'}},'Redaction Complete!'),
     e('p',{style:{color:'#5C7CB9',marginBottom:24}},'File processed successfully.'),
     e('div',{style:{display:'flex',gap:12,justifyContent:'center'}},
@@ -344,7 +344,7 @@ export default function App() {
             style:{border:'2px dashed #5C7CB9',borderRadius:12,padding:'40px',textAlign:'center',cursor:'pointer',background:'rgba(31,73,89,0.3)'}
           },
             e('input',{id:'batchinput',type:'file',accept:'.pdf,.png,.jpg,.jpeg,.xlsx,.xls,.csv',multiple:true,style:{display:'none'},onChange:ev=>{setBatchFiles(Array.from(ev.target.files));setBatchResult(null)}}),
-            e('div',{style:{fontSize:40,marginBottom:10}},batchFiles.length>0?'📦':'📂'),
+            e('div',{style:{fontSize:40,marginBottom:10}},batchFiles.length>0?'ðŸ“¦':'ðŸ“‚'),
             batchFiles.length>0
               ?e('div',null,e('p',{style:{color:'#5C7CB9',fontWeight:600,margin:'0 0 8px'}},batchFiles.length+' files selected'),...batchFiles.map((f,i)=>e('div',{key:i,style:{color:'#fff',fontSize:13,padding:'3px 0',display:'flex',alignItems:'center',gap:8}},e('span',{style:s.badge(typeColor[getFileType(f)]||'#5C7CB9')},(getFileType(f)||'?').toUpperCase()),f.name)))
               :e('div',null,e('p',{style:{color:'#fff',fontWeight:600,margin:'0 0 4px'}},'Drop multiple files here'),e('p',{style:{color:'#5C7CB9',fontSize:13,margin:0}},'PDF, PNG, JPG, XLSX or CSV'))

@@ -1,4 +1,19 @@
+# Python
 venv/
 __pycache__/
 *.pyc
+*.pyo
+uploads/
+output/
+audit.db
+*.db
+
+# Node
+node_modules/
+dist/
 .env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db

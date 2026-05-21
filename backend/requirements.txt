@@ -4,7 +4,6 @@ pymupdf
 pdfminer.six
 pytesseract
 pdf2image
-spacy
 presidio-analyzer
 presidio-anonymizer
 python-multipart
@@ -12,3 +11,6 @@ pillow
 sqlalchemy
 python-dotenv
 aiofiles
+pandas
+openpyxl
+spacy

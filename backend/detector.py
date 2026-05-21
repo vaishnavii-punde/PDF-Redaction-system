@@ -1,16 +1,23 @@
 import re
+import os
 
-try:
-    from presidio_analyzer import AnalyzerEngine
-    analyzer = AnalyzerEngine()
-    NLP_AVAILABLE = True
-except Exception:
-    NLP_AVAILABLE = False
-    print('Presidio not loaded - using regex only')
+# On cloud deployment, use regex only (no spacy/presidio - too heavy)
+# On local machine, presidio is used automatically
+NLP_AVAILABLE = False
+IS_CLOUD = os.environ.get('RENDER', False) or os.environ.get('CLOUD', False)
+
+if not IS_CLOUD:
+    try:
+        from presidio_analyzer import AnalyzerEngine
+        analyzer = AnalyzerEngine()
+        NLP_AVAILABLE = True
+        print('Presidio NLP loaded successfully')
+    except Exception as ex:
+        print(f'Presidio not available, using regex only: {ex}')
 
 REGEX_PATTERNS = {
     'phone':      r'(\+?\d[\d\s\-().]{7,}\d)',
-    'email':      r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}',
+    'email':      r'[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}',
     'dob':        r'\b(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})\b',
     'pan':        r'\b[A-Z]{5}\d{4}[A-Z]\b',
     'aadhaar':    r'\b\d{4}\s\d{4}\s\d{4}\b',
@@ -27,21 +34,15 @@ REGEX_PATTERNS = {
 }
 
 FALSE_POSITIVE_PERSONS = {
-    'django', 'flask', 'react', 'angular', 'vue', 'node', 'nodejs',
-    'python', 'java', 'kotlin', 'swift', 'ruby', 'rails', 'golang',
-    'jupyter', 'jupyter notebooks', 'jupyter notebook',
-    'claude', 'gemini', 'copilot', 'chatgpt', 'openai',
-    'tensorflow', 'pytorch', 'keras', 'sklearn', 'pandas', 'numpy',
-    'matplotlib', 'seaborn', 'plotly', 'opencv',
-    'docker', 'kubernetes', 'jenkins', 'ansible', 'terraform',
-    'github', 'gitlab', 'bitbucket', 'jira', 'confluence',
-    'aws', 'azure', 'google', 'microsoft', 'apple', 'amazon',
-    'linux', 'ubuntu', 'windows', 'macos', 'android', 'ios',
-    'html', 'css', 'sql', 'mysql', 'postgres', 'mongodb', 'redis',
-    'fastapi', 'express', 'spring', 'laravel', 'wordpress',
-    'excel', 'powerpoint', 'photoshop', 'figma', 'canva',
-    'streamlit', 'gradio', 'tableau', 'powerbi',
-    'agile', 'scrum', 'devops', 'git', 'rest', 'api', 'json', 'xml',
+    'django','flask','react','angular','vue','node','nodejs',
+    'python','java','kotlin','swift','ruby','rails','golang',
+    'jupyter','claude','gemini','copilot','chatgpt','openai',
+    'tensorflow','pytorch','keras','sklearn','pandas','numpy',
+    'docker','kubernetes','github','gitlab','aws','azure',
+    'google','microsoft','apple','amazon','linux','ubuntu',
+    'windows','macos','android','ios','html','css','sql',
+    'mysql','postgres','mongodb','redis','fastapi','express',
+    'streamlit','gradio','tableau','powerbi','git','rest','api',
 }
 
 BLOCKED_ENTITY_TYPES = {'URL', 'NRP', 'DATE_TIME'}
@@ -66,6 +67,7 @@ def detect_sensitive(pages, categories, custom_words, min_confidence=0.0):
         text = pg['text']
         words = pg['words']
 
+        # NLP detection (local only)
         if NLP_AVAILABLE:
             try:
                 results = analyzer.analyze(text=text, language='en')
@@ -87,6 +89,7 @@ def detect_sensitive(pages, categories, custom_words, min_confidence=0.0):
             except Exception as ex:
                 print(f'Presidio error: {ex}')
 
+        # Regex detection (always runs)
         for cat, pattern in REGEX_PATTERNS.items():
             if categories and cat not in categories:
                 continue
@@ -99,6 +102,7 @@ def detect_sensitive(pages, categories, custom_words, min_confidence=0.0):
                     'words': find_word_bboxes(m.group(), words)
                 })
 
+        # Custom words
         for word in custom_words:
             if not word.strip():
                 continue
